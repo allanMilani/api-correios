@@ -1,0 +1,57 @@
+version: "3.7"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    entrypoint: dockerize -wait tcp://mysql:3306 -timeout 120s docker-entrypoint.sh
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - redis
+    ports:
+      - "8000:9000"
+    networks:
+      - correios-api
+
+  # nginx
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www
+      - ./.docker/.nginx/:/etc/nginx/conf.d/
+      - ./.docker/.nginx/logs:/var/log/nginx
+    networks:
+      - correios-api
+
+  # db mysql
+  mysql:
+    image: mysql:5.7.22
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: correios_api
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+      MYSQL_USER: root
+    volumes:
+      - ./.docker/.mysql/dbdata:/var/lib/mysql
+    ports:
+      - "3388:3306"
+    networks:
+      - correios-api
+
+  # redis
+  redis:
+    image: redis:latest
+    networks:
+      - correios-api
+
+networks:
+  correios-api:
+    driver: bridge
