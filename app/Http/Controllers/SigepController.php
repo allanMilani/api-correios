@@ -30,7 +30,7 @@ class SigepController extends Controller
         }
     }
 
-    private function executeService($sService, $aData){
+    private function executeService($sService, $aData, $aRemoveElement = []){
         $aResult = $this->soap->$sService($aData);
 
         if(empty($aResult->return)) 
@@ -38,7 +38,7 @@ class SigepController extends Controller
         
         return response()->json([
                 'message' => 'Registros encontrado com sucesso', 
-                'data' => ObjectUtil::ConvertFromLatin1ToUtf8Recursively($aResult->return)
+                'data' => ObjectUtil::ConvertFromLatin1ToUtf8Recursively($aResult->return, $aRemoveElement)
             ],
             200,
             [],
@@ -100,7 +100,7 @@ class SigepController extends Controller
                 'senha'            => $oRequest->senha,
                 'idContrato'       => $oRequest->id_contrato,
                 'idCartaoPostagem' => $oRequest->id_cartao_postagem
-            ]);
+            ], ['chancela']);
         } catch(\Throwable $e){
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -304,7 +304,7 @@ class SigepController extends Controller
                 'acao'            => $oRequest->acao,
                 'tipoBloqueio'    => $oRequest->tipo_bloqueio,
                 'idPlp'           => $oRequest->id_plp,
-                'numeroEtiqueta ' => $oRequest->numero_etiqueta
+                'numeroEtiqueta' => $oRequest->numero_etiqueta
             ]);
         } catch(\Throwable $e){
             return response()->json(['message' => $e->getMessage()], 500);
