@@ -80,4 +80,11 @@ class XMLUtil {
       return empty(array_filter(array_keys($aData), 'is_string'));
   } 
 
+  public static function xmlToJson($sXml){
+    $sSimpleXml = simplexml_load_string($sXml);
+    $sJson = json_encode($sSimpleXml, JSON_PRETTY_PRINT+JSON_UNESCAPED_SLASHES);
+
+    return json_decode($sJson, true);
+  }
+
 }

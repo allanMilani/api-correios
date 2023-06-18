@@ -19,21 +19,21 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [PassportAuthController::class, 'register']);
 Route::post('/login', [PassportAuthController::class, 'login']);
 
-Route::group(['middleware' => 'auth:api'], function(){
 
+Route::group(['middleware' => 'auth:api'], function(){
     //User Authenticate
     Route::post('/logout', [PassportAuthController::class, 'logout']);
     Route::get('/user', [PassportAuthController::class, 'show']);
     Route::put('/reset', [PassportAuthController::class, 'resetPassword']);
-
-    //Rotas Correios
-    Route::post('verifica-disponibilidade-servico', [SigepController::class, 'checkServiceAvailability']);
-    Route::post('busca-cliente', [SigepController::class, 'findCliente']);
-    Route::post('consulta-cep', [SigepController::class, 'findCEP']);
-    Route::post('status-cartao-postagem', [SigepController::class, 'getStatusCard']);
-    Route::post('solicita-etiquetas', [SigepController::class, 'getLabel']);
-    Route::post('gera-digito-verificador-etiquetas', [SigepController::class, 'getCheckDigit']);
-    Route::post('fecha-plp', [SigepController::class, 'closePlp']);
-    Route::post('solicita-xml-plp', [SigepController::class, 'getXmlPlp']);
-    Route::post('bloquear-objeto', [SigepController::class, 'blockObject']);
 });
+
+//Rotas Correios
+Route::post('verifica-disponibilidade-servico', [SigepController::class, 'checkServiceAvailability']);
+Route::post('busca-cliente', [SigepController::class, 'findCliente']);
+Route::post('consulta-cep', [SigepController::class, 'findCEP']);
+Route::post('status-cartao-postagem', [SigepController::class, 'getStatusCard']);
+Route::post('solicita-etiquetas', [SigepController::class, 'getLabel']);
+Route::post('gera-digito-verificador-etiquetas', [SigepController::class, 'getCheckDigit']);
+Route::post('fecha-plp', [SigepController::class, 'closePlp']);
+Route::post('solicita-xml-plp', [SigepController::class, 'getXmlPlp']);
+Route::post('bloquear-objeto', [SigepController::class, 'blockObject']);
