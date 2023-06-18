@@ -30,12 +30,15 @@ class SigepController extends Controller
         }
     }
 
-    private function executeService($sService, $aData, $aRemoveElement = []){
+    private function executeService($sService, $aData, $aRemoveElement = [], $bReturnObject = false){
         $aResult = $this->soap->$sService($aData);
 
         if(empty($aResult->return)) 
             return response()->json(['message' => 'Nenhum registro foi encontrado :('], 200);
         
+        if($bReturnObject)
+            return $aResult;
+
         return response()->json([
                 'message' => 'Registros encontrado com sucesso', 
                 'data' => ObjectUtil::ConvertFromLatin1ToUtf8Recursively($aResult->return, $aRemoveElement)
@@ -268,11 +271,19 @@ class SigepController extends Controller
             if(!empty($aErrors))
                 return response()->json(['message' => 'Por favor preencha corretamente o(s) seguinte(s) campo(s): ' . join(', ', $aErrors)], 400);
 
-            return $this->executeService('solicitaXmlPlp', [
+            $oDados = $this->executeService('solicitaXmlPlp', [
                 'usuario'     => $oRequest->usuario,
                 'senha'       => $oRequest->senha,
                 'idPlpMaster' => $oRequest->id_plp_master
-            ]);
+            ], [], true);
+            return response()->json([
+                    'message' => 'Registros encontrado com sucesso', 
+                    'data' => XMLUtil::xmlToJson($oDados->return)
+                ],
+                200,
+                [],
+                JSON_UNESCAPED_SLASHES+JSON_UNESCAPED_UNICODE
+            );
         } catch(\Throwable $e){
             return response()->json(['message' => $e->getMessage()], 500);
         }
