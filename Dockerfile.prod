@@ -39,13 +39,6 @@ RUN pecl install -o -f redis \
 # Set working directory
 WORKDIR /var/www
 
-# COPY --chown=www-data:www-data . /var/www/
-
 COPY --chown=www-data:www-data ./docker-entrypoint.sh /var/www/docker-entrypoint.sh
-
-ENV DOCKERIZE_VERSION v0.6.1
-RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-    && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-    && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 RUN cp /var/www/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh && chmod +x /usr/local/bin/docker-entrypoint.sh
