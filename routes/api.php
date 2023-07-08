@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\PassportAuthController;
+use App\Http\Controllers\PrePostagemController;
+use App\Http\Controllers\RastreioController;
 use App\Http\Controllers\SigepController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -37,3 +39,7 @@ Route::post('gera-digito-verificador-etiquetas', [SigepController::class, 'getCh
 Route::post('fecha-plp', [SigepController::class, 'closePlp']);
 Route::post('solicita-xml-plp', [SigepController::class, 'getXmlPlp']);
 Route::post('bloquear-objeto', [SigepController::class, 'blockObject']);
+
+//Prepostagem
+Route::post('prepostagens', [PrePostagemController::class, 'getPrepostagens']);
+Route::post('rastro', [RastreioController::class, 'getStatus']);
