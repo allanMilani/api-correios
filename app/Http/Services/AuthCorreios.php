@@ -40,7 +40,7 @@ class AuthCorreios{
         ]
       );
 
-      return $oTokenCorreios;
+      return (array) $oTokenCorreios;
     } catch(\Throwable $e){
       return false;
     }
