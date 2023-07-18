@@ -7,14 +7,14 @@ use GuzzleHttp\Client;
 
 class AuthCorreios{
 
-  public function tokenSaved($user, $password, $contract, $card, $cnpj){
+  public function tokenSaved($user, $password, $contract, $card, $cnpj, $regerar = false){
     $token = TokenCorreios::where([
       'cnpj' => $cnpj
     ])
     ->get()
     ->last();
 
-    if(!empty($token) && strtotime($token->expira_em) >= strtotime(date('Y-m-d H:i:s'))){
+    if(!empty($token) && strtotime($token->expira_em) >= strtotime(date('Y-m-d H:i:s')) && !$regerar){
       return $token->toArray();
     }
 
